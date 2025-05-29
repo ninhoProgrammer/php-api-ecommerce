@@ -1,34 +1,14 @@
 <?php
-// Allow CORS and set JSON header
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json");
+require_once 'middleware.php';
+require_once 'db.php';
 
-// Include DB connection
-include("db.php");
+$id = $_GET['id'] ?? null;
+if (!$id) send_json_error("Missing product ID", 400);
 
-// Fetch products from the database
-$sql = "SELECT * FROM products";
-$result = $conn->query($sql);
+$stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
+$stmt->execute([$id]);
+$product = $stmt->fetch();
 
-// Check for errors
-if (!$result) {
-  http_response_code(500);
-  echo json_encode(["error" => "Query failed: " . $conn->error]);
-  exit;
-}
+if (!$product) send_json_error("Product not found", 404);
 
-// Store products in array
-$products = [];
-
-while ($row = $result->fetch_assoc()) {
-  $products[] = [
-    "id" => (int)$row["id"],
-    "name" => $row["name"],
-    "price" => (float)$row["price"],
-    "image_url" => $row["image_url"]
-  ];
-}
-
-// Output as JSON
-echo json_encode($products);
-?>
+send_json_success($product);

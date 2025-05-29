@@ -1,27 +1,31 @@
 <?php
-include("db.php");
+require_once 'middleware.php';
+require_once 'db.php';
+// Permitir peticiones desde tu frontend
+header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: POST");
 
-// Obtener datos del JSON recibido
-$data = json_decode(file_get_contents("php://input"), true);
+// Leer el cuerpo del JSON
+$input = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['name'], $data['price'], $data['image_url'])) {
-  http_response_code(400);
-  echo json_encode(["error" => "Missing required fields"]);
-  exit;
+// Validar campos
+if (!isset($input['name'], $input['price'], $input['image'])) {
+    echo json_encode(['error' => 'Missing required fields']);
+    http_response_code(422);
+    exit;
 }
 
-$name = $conn->real_escape_string($data['name']);
-$price = floatval($data['price']);
-$imageUrl = $conn->real_escape_string($data['image_url']);
+$name = $input['name'];
+$price = $input['price'];
+$image = $input['image'];
 
-// Insertar en la tabla
-$sql = "INSERT INTO PRODUCTS (NAME, PRICE, IMAGE_URL) VALUES ('$name', $price, '$imageUrl')";
+try {
+    $stmt = $pdo->prepare("INSERT INTO products (name, price, image) VALUES (?, ?, ?)");
+    $stmt->execute([$name, $price, $image]);
 
-if ($conn->query($sql) === TRUE) {
-  echo json_encode(["status" => "Product added", "id" => $conn->insert_id]);
-} else {
-  http_response_code(500);
-  echo json_encode(["error" => $conn->error]);
+    echo json_encode(['success' => true, 'message' => 'Product added']);
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
 }
-?>
