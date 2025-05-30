@@ -5,7 +5,7 @@ require_once 'db.php';
 $id = $_GET['id'] ?? null;
 if (!$id) send_json_error("Missing product ID", 400);
 
-$stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM products WHERE ID = ?");
 $stmt->execute([$id]);
 $product = $stmt->fetch();
 
