@@ -1,6 +1,6 @@
 <?php
-require_once 'middleware.php';
-require_once 'db.php';
+require_once(__DIR__ . '/../config/middleware.php');
+require_once(__DIR__ . '/../config/db.php');
 
 $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -1,6 +1,6 @@
 <?php
-require_once 'middleware.php';
-require_once 'db.php';
+require_once(__DIR__ . '/../config/middleware.php');
+require_once(__DIR__ . '/../config/db.php');
 
 $id = $_GET['id'] ?? null;
 if (!$id) send_json_error("Missing product ID", 422);

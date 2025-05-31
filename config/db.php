@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php'; // Autoload Composer
+require_once(__DIR__ . '/../vendor/autoload.php');
 
 use Dotenv\Dotenv;
 
 // Cargar las variables de entorno desde .env
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 // Acceder a las variables
