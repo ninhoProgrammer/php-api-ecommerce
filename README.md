@@ -10,18 +10,33 @@ This is a simple e-commerce backend using:
 📬 Communication using fetch or Postman
 
 ## 📁 Project Structure
-bash
-
+```plaintext
 /php-api-ecommerce
-  ├── db.php
-  ├── add_product.php
-  ├── get_products.php
-  ├── cart.php
+  ├── category/ 
+  │   └── add_category.php  
+  │   └── get_category.php 
+  │   └── get_categories.php   
+  │   └── update_category.php  
+  │   └── delete_category.php  
+  ├── config/ 
+  │   └── db.php 
+  │   └── middleware.php    
+  ├── product/ 
+  │   └── add_product.php  
+  │   └── add_stock.php   
+  │   └── delete_product.php 
+  │   └── get_product.php 
+  │   └── get_products.php   
+  │   └── update_product.php  
+  │   └── update_status.php  
+ 
 /frontend
+  ...
   ├── components/
   │   └── AddProduct.vue
-  ├── pages/
-      └── admin.astro
+ 
+```
+
 
 ## 🧰 Requirements
 XAMPP
@@ -57,6 +72,18 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 ?>
+
+Create new file:
+.env 
+
+DB_HOST=localhost
+DB_NAME=store_db
+DB_CHARSET=utf8mb4
+DB_USER=root
+DB_PASS=
+
+Install
+composer require vlucas/phpdotenv
 
 Place this in /php-api-ecommerce/db.php.
 
